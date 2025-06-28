@@ -20,17 +20,25 @@ async def elevenlabs_stt_stream(audio_bytes):
     
     try:
         headers = {
-            "xi-api-key": ELEVENLABS_API_KEY,
-            "Content-Type": "audio/wav"
+            "xi-api-key": ELEVENLABS_API_KEY
         }
         
         # Use ElevenLabs STT endpoint
         url = f"{ELEVENLABS_BASE_URL}/speech-to-text"
         
+        # Prepare multipart form data with required model_id
+        files = {
+            'file': ('audio.wav', audio_bytes, 'audio/wav')
+        }
+        data = {
+            'model_id': 'scribe_v1'
+        }
+        
         response = requests.post(
             url,
             headers=headers,
-            data=audio_bytes,
+            files=files,
+            data=data,
             timeout=30
         )
         

@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_sock import Sock
 import asyncio
+import json
 from utils import elevenlabs_stt_stream, elevenlabs_tts_stream
 import os
 
@@ -25,7 +26,7 @@ def chat(ws):
         if getattr(text, 'final', False):
             # Simple response for now - you can enhance this later
             answer = f"I heard you say: '{text.text}'. This is a test response using ElevenLabs voice features."
-            ws.send({"type": "answer", "text": answer})
+            ws.send(json.dumps({"type": "answer", "text": answer}))
             tts_stream = elevenlabs_tts_stream(answer)
             for chunk in tts_stream:
                 ws.send(chunk)
